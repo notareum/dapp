@@ -146,19 +146,20 @@ export default function DashboardPage() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-            <div>
+
+            <div className="min-w-0">
               <div className="stat-label mb-1.5">Resources</div>
               <div className="stat-value">{stats.resources}</div>
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="stat-label mb-1.5">Staked NOTA</div>
               <div className="stat-value">{formatNota(stats.staked)}</div>
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="stat-label mb-1.5">veNOTA</div>
               <div className="stat-value">{formatNota(stats.votingPower)}</div>
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="stat-label mb-1.5">Daily left</div>
               <div className="stat-value">
                 {stats.tier === ValidatorTier.PLATINUM ? '∞' : stats.dailyRemaining.toString()}
