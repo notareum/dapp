@@ -391,6 +391,100 @@ pre {
   background: var(--border);
 }
 
+/* ─── Glass panel card (dashboard-style) ─── */
+.glass-panel {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 1rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+}
+.glass-panel:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+.dark .glass-panel:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.glass-panel-interactive {
+  cursor: pointer;
+}
+.glass-panel-interactive:hover {
+  border-color: color-mix(in srgb, var(--brand) 40%, var(--card-border));
+  transform: translateY(-2px);
+}
+
+/* ─── Dashboard stat number ─── */
+.stat-value {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--text);
+}
+.stat-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ─── Decorative background blur (dashboard) ─── */
+.decor-blur {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.45;
+}
+.dark .decor-blur {
+  opacity: 0.3;
+}
+
+/* ─── Dashboard grid pattern overlay ─── */
+.grid-pattern {
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--text) 12%, transparent) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* ─── Form inputs ─── */
+.input {
+  width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 0.625rem;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  font-family: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.input:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 18%, transparent);
+}
+.input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+.input-mono {
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: 0.8125rem;
+}
+
+.label-field {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
 /* ─── Section separator dots (V7) ─── */
 .grid-separator {
   display: grid;
