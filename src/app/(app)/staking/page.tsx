@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
-import { formatEther, parseEther } from 'viem';
+import { parseEther } from 'viem';
+import { formatTokenAmount } from '@/lib/format';
 import { ValidatorTier, type ValidatorInfo } from '@notareum/sdk';
 import PageHeader from '@/components/PageHeader';
 import TierBadge from '@/components/TierBadge';
@@ -148,7 +149,7 @@ export default function StakingPage() {
             <div className="text-right">
               <div className="stat-label mb-1">After stake</div>
               <div className="text-sm font-mono font-semibold" style={{ color: 'var(--text)' }}>
-                {formatEther((info?.stakedAmount ?? 0n) + projectedAmount)} NOTA
+                {formatTokenAmount((info?.stakedAmount ?? 0n) + projectedAmount, { symbol: 'NOTA' })}
               </div>
             </div>
           </div>
@@ -202,7 +203,7 @@ export default function StakingPage() {
 
           <div className="space-y-3">
             <Row label="Current tier" value={<TierBadge tier={info?.tier ?? ValidatorTier.NONE} size="md" />} />
-            <Row label="Staked" value={<span className="font-mono text-sm font-semibold">{formatEther(info?.stakedAmount ?? 0n)} NOTA</span>} />
+            <Row label="Staked" value={<span className="font-mono text-sm font-semibold">{formatTokenAmount(info?.stakedAmount ?? 0n, { symbol: 'NOTA' })}</span>} />
             <Row
               label="Daily remaining"
               value={
@@ -212,7 +213,7 @@ export default function StakingPage() {
               }
             />
             <Row label="Slash count" value={<span className="font-mono text-sm">{info?.slashCount ?? 0}</span>} />
-            <Row label="Unbonding" value={<span className="font-mono text-sm">{formatEther(info?.unbondingAmount ?? 0n)} NOTA</span>} />
+            <Row label="Unbonding" value={<span className="font-mono text-sm">{formatTokenAmount(info?.unbondingAmount ?? 0n, { symbol: 'NOTA' })}</span>} />
             <Row label="Active" value={<span className="font-mono text-sm">{info?.isActive ? 'yes' : 'no'}</span>} />
           </div>
 

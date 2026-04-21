@@ -3,9 +3,18 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useAccount, useBalance } from 'wagmi';
-import { formatEther } from 'viem';
 import { ValidatorTier } from '@notareum/sdk';
 import { useNotareum } from '@/hooks/useNotareum';
+import { formatTokenAmount } from '@/lib/format';
+
+function formatEthBal(value: bigint): string {
+  try {
+    const num = Number(value) / 1e18;
+    if (num === 0) return '0';
+    if (num < 0.0001) return '<0.0001';
+    return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+  } catch { return '0'; }
+}
 import TierBadge from '@/components/TierBadge';
 
 function truncateAddr(addr?: string) {
@@ -14,18 +23,7 @@ function truncateAddr(addr?: string) {
 }
 
 function formatNota(n: bigint | undefined | null) {
-  if (n === undefined || n === null) return '0';
-  try {
-    const formatted = formatEther(n);
-    const num = Number.parseFloat(formatted);
-    if (num === 0) return '0';
-    if (num < 0.01) return '<0.01';
-    if (num < 1000) return num.toFixed(2);
-    if (num < 1_000_000) return `${(num / 1000).toFixed(1)}K`;
-    return `${(num / 1_000_000).toFixed(2)}M`;
-  } catch {
-    return '0';
-  }
+  return formatTokenAmount(n);
 }
 
 interface DashboardStats {
@@ -124,7 +122,7 @@ export default function DashboardPage() {
             <div className="rounded-xl p-3" style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}>
               <div className="stat-label mb-1">ETH</div>
               <div className="text-lg font-bold" style={{ color: 'var(--text)' }}>
-                {balance.data ? Number(formatEther(balance.data.value)).toFixed(4) : '—'}
+                {balance.data ? formatEthBal(balance.data.value) : '\u2014'}
               </div>
             </div>
             <div className="rounded-xl p-3" style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}>

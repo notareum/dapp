@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
-import { formatEther, parseEther } from 'viem';
+import { parseEther } from 'viem';
+import { formatTokenAmount, formatPercent } from '@/lib/format';
 import PageHeader from '@/components/PageHeader';
 import { useNotareumFactory } from '@/hooks/useNotareum';
 
@@ -125,14 +126,14 @@ export default function GovernancePage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <div className="glass-panel p-5">
           <div className="stat-label mb-2">My Voting Power</div>
-          <div className="stat-value">{formatEther(votingPower)}</div>
+          <div className="stat-value">{formatTokenAmount(votingPower)}</div>
           <div className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>veNOTA</div>
         </div>
         <div className="glass-panel p-5">
           <div className="stat-label mb-2">Total veNOTA Supply</div>
-          <div className="stat-value">{formatEther(totalSupply)}</div>
+          <div className="stat-value">{formatTokenAmount(totalSupply)}</div>
           <div className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
-            Your share: {totalSupply > 0n ? ((Number(votingPower) / Number(totalSupply)) * 100).toFixed(4) : '0'}%
+            Your share: {formatPercent(votingPower, totalSupply, 4)}
           </div>
         </div>
       </div>
@@ -183,7 +184,7 @@ export default function GovernancePage() {
             <div>
               <div className="stat-label mb-1">Projected veNOTA</div>
               <div className="text-lg font-bold font-mono" style={{ color: 'var(--brand)' }}>
-                {formatEther(projected)}
+                {formatTokenAmount(projected)}
               </div>
             </div>
             <div className="text-right">
