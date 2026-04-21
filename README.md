@@ -1,94 +1,95 @@
 <div align="center">
 
-# Notareum
+# Notareum dApp
 
 **The Trust Layer for Web3**
 
-Official marketing website for the Notareum protocol: an open standard for sharing blockchain resources safely with cryptographic verification across every chain.
+Register resources, create .nota files, stake NOTA, and participate in the verification network.
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
-[![License](https://img.shields.io/badge/License-Private-red)]()
+[![wagmi](https://img.shields.io/badge/wagmi-Web3-black)](https://wagmi.sh/)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-[Live Site](https://notareum.com) · [Whitepaper](https://notareum.com/whitepaper/) · [Protocol](https://notareum.com/protocol/)
+[Live App](https://app.notareum.com) · [Website](https://notareum.com) · [Protocol Spec](https://github.com/notareum/protocol)
 
 </div>
 
----
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [Scripts](#scripts)
-- [Deployment](#deployment)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Overview
 
-This repository contains the source code for [notareum.com](https://notareum.com), the public-facing website for the Notareum protocol. The site communicates the protocol's architecture, developer SDK, ecosystem, tokenomics, use cases, and .nota file format to builders, partners, and the broader Web3 community.
+The Notareum dApp is the primary interface for interacting with the Notareum Protocol. It connects to the on-chain smart contracts via the [`@notareum/sdk`](https://github.com/notareum/notareum-ts-sdk) and provides a complete workflow for resource registration, verification, staking, and governance.
 
-### Key Pages
+## Pages
 
-| Route           | Description                                                                                                   |
-| --------------- | ------------------------------------------------------------------------------------------------------------- |
-| `/`           | Landing page with hero, architecture, challenges, process, SDK, ecosystem, use cases, token, and CTA sections |
-| `/protocol`   | Protocol architecture deep-dive                                                                               |
-| `/developers` | Developer SDK documentation & resources                                                                       |
-| `/ecosystem`  | Ecosystem partners & integrations                                                                             |
-| `/token`      | NOTA token utility & distribution                                                                             |
-| `/whitepaper` | Whitepaper viewer                                                                                             |
-| `/about`      | About Notareum Labs                                                                                           |
+| Route | Description |
+|-------|-------------|
+| `/` | Branded entry page with wallet connection |
+| `/dashboard` | Overview: resources, staking position, voting power, quick actions |
+| `/registry` | Register resources, search by ID or alias, manage owned resources |
+| `/nota` | Create, sign, download, import, and verify .nota files |
+| `/verification` | Request verification, view status, validator attestation panel |
+| `/staking` | Stake/unstake NOTA, view tier, daily verification limits |
+| `/governance` | Lock NOTA for veNOTA, manage locks, view voting power |
+| `/explorer` | Search resources, browse protocol activity |
 
 ## Tech Stack
 
-| Technology               | Purpose                                     |
-| ------------------------ | ------------------------------------------- |
-| **Next.js 14**     | React framework (App Router, static export) |
-| **TypeScript 5**   | Type-safe development                       |
-| **Tailwind CSS 3** | Utility-first styling                       |
-| **next-themes**    | Dark / light mode support                   |
-| **Inter**          | Primary typeface via `next/font`          |
-| **ESLint**         | Code quality & consistency                  |
+| Technology | Purpose |
+|------------|---------|
+| **Next.js 14** | React framework (App Router) |
+| **TypeScript 5** | Type safety |
+| **Tailwind CSS 3** | Styling |
+| **wagmi + viem** | Wallet connection and chain interaction |
+| **ConnectKit** | Wallet modal UI |
+| **@notareum/sdk** | Protocol SDK (contract clients + core) |
+| **ethers v6** | Signer bridge for SDK |
+| **next-themes** | Dark/light mode |
 
 ## Project Structure
 
 ```
-├── .github/workflows/     # CI/CD pipeline (cPanel FTP deploy)
-├── docs/                  # Project documentation & goals
-├── public/                # Static assets, robots.txt, manifest
-├── src/
-│   ├── app/               # Next.js App Router pages & layouts
-│   │   ├── layout.tsx     # Root layout (metadata, fonts, theme)
-│   │   ├── page.tsx       # Home page composition
-│   │   ├── globals.css    # Global styles & CSS custom properties
-│   │   ├── sitemap.ts     # Dynamic sitemap generation
-│   │   └── */page.tsx     # Route-specific pages
-│   └── components/        # Shared UI components
-├── tailwind.config.ts     # Theme tokens (brand, surface, accent)
-├── next.config.js         # Static export & image config
-└── package.json
+src/
+├── app/
+│   ├── (entry)/page.tsx        # Landing/connect page
+│   ├── (app)/layout.tsx        # Sidebar layout wrapper
+│   ├── (app)/dashboard/        # Dashboard
+│   ├── (app)/registry/         # Resource registry
+│   ├── (app)/nota/             # .nota file operations
+│   ├── (app)/verification/     # Verification requests
+│   ├── (app)/staking/          # Validator staking
+│   ├── (app)/governance/       # veNOTA governance
+│   ├── (app)/explorer/         # Protocol explorer
+│   ├── layout.tsx              # Root layout (providers)
+│   └── globals.css             # Design system (CSS vars)
+├── components/
+│   ├── Sidebar.tsx             # Collapsible sidebar nav
+│   ├── Web3Provider.tsx        # wagmi + ConnectKit provider
+│   ├── ConnectButton.tsx       # Wallet connect button
+│   ├── StatusBadge.tsx         # Verification status badge
+│   ├── TierBadge.tsx           # Validator tier badge
+│   ├── ResourceCard.tsx        # Resource display card
+│   └── PageHeader.tsx          # Page title component
+├── hooks/
+│   └── useNotareum.ts          # SDK integration hook
+├── lib/
+│   ├── contracts.ts            # Contract addresses (Sepolia)
+│   └── format.ts               # Token amount formatting
+└── public/                     # Logos, favicons, assets
 ```
 
 ## Getting Started
 
 ### Prerequisites
 
-- **Node.js** ≥ 18
-- **npm** ≥ 9
+- Node.js >= 18
+- npm >= 9
 
 ### Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/notareum/website.git
-cd website
-
-# Install dependencies
+git clone https://github.com/notareum/dapp.git
+cd dapp
 npm install
 ```
 
@@ -98,54 +99,38 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the site. Pages auto-refresh on save.
+Open [http://localhost:3000](http://localhost:3000). Connect a wallet on Sepolia testnet.
+
+### Environment Variables
+
+Create `.env.local`:
+
+```env
+NEXT_PUBLIC_WC_PROJECT_ID=your_walletconnect_project_id
+```
+
+Get a project ID from [WalletConnect Cloud](https://cloud.walletconnect.com/).
 
 ## Scripts
 
-| Command           | Description                                     |
-| ----------------- | ----------------------------------------------- |
-| `npm run dev`   | Start the development server                    |
-| `npm run build` | Generate a production static export to `out/` |
-| `npm run start` | Serve the production build locally              |
-| `npm run lint`  | Run ESLint across the codebase                  |
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Development server |
+| `npm run build` | Production build |
+| `npm run start` | Serve production build |
+| `npm run lint` | ESLint |
 
-## Deployment
+## Network
 
-The site is built as a **static export** (`output: 'export'` in `next.config.js`), producing a fully static `out/` directory that can be uploaded to any hosting provider.
-
-### Automated — GitHub Actions → cPanel FTP
-
-A workflow at `.github/workflows/deploy-prod.yml` automatically builds and deploys the site whenever code is pushed to the `prod/deploy` branch.
-
-**Required GitHub Secrets:**
-
-| Secret           | Description                            |
-| ---------------- | -------------------------------------- |
-| `FTP_SERVER`   | FTP hostname for your deployer account |
-| `FTP_USERNAME` | FTP username                           |
-| `FTP_PASSWORD` | FTP password                           |
-
-**Optional GitHub Variable:**
-
-| Variable           | Description                  | Default           |
-| ------------------ | ---------------------------- | ----------------- |
-| `FTP_SERVER_DIR` | Remote destination directory | `/public_html/` |
-
-### Manual
-
-```bash
-npm run build
-# Upload the contents of out/ to your hosting provider
-```
+Currently targeting **Ethereum Sepolia** testnet. Contract addresses are configured in `src/lib/contracts.ts` (placeholder addresses until mainnet deployment).
 
 ## Contributing
 
-1. Create a feature branch from `master`.
-2. Follow [Conventional Commits](https://www.conventionalcommits.org/) for all commit messages.
-3. Keep commits atomic — one logical change per commit.
-4. Run `npm run lint` before opening a pull request.
-5. Open a PR against `master` for review.
+1. Branch from `main`
+2. Follow [Conventional Commits](https://www.conventionalcommits.org/)
+3. One logical change per commit
+4. Run `npm run lint` before opening a PR
 
 ## License
 
-This project is **private** and proprietary to Notareum Labs. All rights reserved.
+[MIT](LICENSE)
