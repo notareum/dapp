@@ -434,6 +434,50 @@ pre {
   color: var(--text-muted);
 }
 
+/* ─── Sidebar nav hover / active states ─── */
+.sidebar-nav-item {
+  color: var(--text-body);
+  cursor: pointer;
+}
+.sidebar-nav-item:hover {
+  background: color-mix(in srgb, var(--text-muted) 10%, transparent);
+  color: var(--text);
+}
+.sidebar-nav-item:hover .sidebar-nav-icon {
+  color: var(--text) !important;
+}
+.sidebar-nav-item:active {
+  background: color-mix(in srgb, var(--text-muted) 18%, transparent);
+  transform: scale(0.98);
+}
+.sidebar-nav-active {
+  background: color-mix(in srgb, var(--brand) 12%, transparent) !important;
+  color: var(--brand) !important;
+}
+.sidebar-nav-active:hover {
+  background: color-mix(in srgb, var(--brand) 18%, transparent) !important;
+}
+.sidebar-nav-active .sidebar-nav-icon {
+  color: var(--brand) !important;
+}
+.sidebar-sub-item {
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.sidebar-sub-item:hover {
+  background: color-mix(in srgb, var(--text-muted) 8%, transparent);
+  color: var(--text-body);
+}
+.sidebar-sub-item:active {
+  background: color-mix(in srgb, var(--text-muted) 14%, transparent);
+}
+.sidebar-sub-item.sidebar-nav-active {
+  color: var(--brand) !important;
+}
+.sidebar-hover-btn:hover {
+  background: color-mix(in srgb, var(--border) 80%, transparent);
+}
+
 /* ─── Decorative background blur (dashboard) ─── */
 .decor-blur {
   position: absolute;

@@ -8,10 +8,16 @@ import { useTheme } from 'next-themes';
 import { useAccount, useDisconnect } from 'wagmi';
 import ConnectButton from './ConnectButton';
 
+interface SubItem {
+  href: string;
+  label: string;
+}
+
 interface NavItem {
   href: string;
   label: string;
   icon: React.ReactNode;
+  children?: SubItem[];
 }
 
 const navItems: NavItem[] = [
@@ -37,6 +43,11 @@ const navItems: NavItem[] = [
         <path d="M10 10v10" />
       </svg>
     ),
+    children: [
+      { href: '/registry', label: 'Register Resource' },
+      { href: '/registry/my-resources', label: 'My Resources' },
+      { href: '/registry/search', label: 'Search' },
+    ],
   },
   {
     href: '/nota',
@@ -48,6 +59,10 @@ const navItems: NavItem[] = [
         <line x1="9" y1="15" x2="15" y2="15" />
       </svg>
     ),
+    children: [
+      { href: '/nota', label: 'Create .nota' },
+      { href: '/nota/import', label: 'Import and Verify' },
+    ],
   },
   {
     href: '/verification',
@@ -58,6 +73,11 @@ const navItems: NavItem[] = [
         <polyline points="22 4 12 14.01 9 11.01" />
       </svg>
     ),
+    children: [
+      { href: '/verification', label: 'Request Verification' },
+      { href: '/verification/attest', label: 'Attest (Validators)' },
+      { href: '/verification/disputes', label: 'Disputes' },
+    ],
   },
   {
     href: '/staking',
@@ -70,6 +90,10 @@ const navItems: NavItem[] = [
         <path d="M18 17V7" />
       </svg>
     ),
+    children: [
+      { href: '/staking', label: 'Stake NOTA' },
+      { href: '/staking/position', label: 'My Position' },
+    ],
   },
   {
     href: '/governance',
@@ -81,6 +105,10 @@ const navItems: NavItem[] = [
         <path d="M9 21v-8h6v8" />
       </svg>
     ),
+    children: [
+      { href: '/governance', label: 'Lock veNOTA' },
+      { href: '/governance/locks', label: 'My Locks' },
+    ],
   },
   {
     href: '/explorer',
@@ -101,13 +129,14 @@ function normalizePath(path: string) {
 
 function truncateAddr(addr: string) {
   if (!addr) return '';
-  return `${addr.slice(0, 6)}…${addr.slice(-4)}`;
+  return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
 }
 
 export default function Sidebar() {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const { address, isConnected } = useAccount();
@@ -116,12 +145,40 @@ export default function Sidebar() {
   useEffect(() => setMounted(true), []);
   useEffect(() => setMobileOpen(false), [pathname]);
 
+  // Auto-expand the section containing the active route
+  useEffect(() => {
+    const current = normalizePath(pathname || '/');
+    for (const item of navItems) {
+      if (item.children) {
+        const match = item.children.some(c => normalizePath(c.href) === current);
+        const parentMatch = normalizePath(item.href) === current;
+        if (match || parentMatch) {
+          setExpandedSections(prev => new Set(prev).add(item.href));
+        }
+      }
+    }
+  }, [pathname]);
+
   const isDark = resolvedTheme === 'dark';
   const currentPath = normalizePath(pathname || '/');
 
   const isActive = (href: string) => {
     const n = normalizePath(href);
-    return currentPath === n || currentPath.startsWith(`${n}/`);
+    return currentPath === n;
+  };
+
+  const isParentActive = (item: NavItem) => {
+    if (isActive(item.href)) return true;
+    return item.children?.some(c => isActive(c.href)) ?? false;
+  };
+
+  const toggleSection = (href: string) => {
+    setExpandedSections(prev => {
+      const next = new Set(prev);
+      if (next.has(href)) next.delete(href);
+      else next.add(href);
+      return next;
+    });
   };
 
   const widthClass = collapsed ? 'lg:w-[68px]' : 'lg:w-[240px]';
@@ -187,7 +244,7 @@ export default function Sidebar() {
           <button
             type="button"
             onClick={() => setCollapsed(!collapsed)}
-            className="hidden lg:flex items-center justify-center w-7 h-7 rounded-md transition-colors hover:bg-[color-mix(in_srgb,var(--border)_80%,transparent)]"
+            className="hidden lg:flex items-center justify-center w-7 h-7 rounded-md transition-colors sidebar-hover-btn"
             style={{ color: 'var(--text-muted)' }}
             aria-label="Toggle sidebar"
           >
@@ -199,28 +256,102 @@ export default function Sidebar() {
 
         {/* Nav */}
         <nav className="flex-1 overflow-y-auto py-4 px-3">
-          <ul className="space-y-1">
+          <ul className="space-y-0.5">
             {navItems.map((item) => {
-              const active = isActive(item.href);
+              const parentActive = isParentActive(item);
+              const hasChildren = item.children && item.children.length > 0;
+              const expanded = expandedSections.has(item.href) && !collapsed;
+
               return (
                 <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className={`
-                      flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
-                      ${collapsed ? 'lg:justify-center lg:px-2' : ''}
-                    `}
-                    style={{
-                      background: active ? 'color-mix(in srgb, var(--brand) 12%, transparent)' : 'transparent',
-                      color: active ? 'var(--brand)' : 'var(--text-body)',
-                    }}
-                    title={collapsed ? item.label : undefined}
-                  >
-                    <span className="flex-shrink-0" style={{ color: active ? 'var(--brand)' : 'var(--text-muted)' }}>
-                      {item.icon}
-                    </span>
-                    {!collapsed && <span className="truncate">{item.label}</span>}
-                  </Link>
+                  {/* Parent nav item */}
+                  <div className="flex items-center">
+                    <Link
+                      href={item.href}
+                      onClick={(e) => {
+                        if (hasChildren && !collapsed) {
+                          e.preventDefault();
+                          toggleSection(item.href);
+                        }
+                      }}
+                      className={`
+                        sidebar-nav-item flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150
+                        ${collapsed ? 'lg:justify-center lg:px-2' : ''}
+                        ${parentActive ? 'sidebar-nav-active' : ''}
+                      `}
+                      title={collapsed ? item.label : undefined}
+                    >
+                      <span className="flex-shrink-0 sidebar-nav-icon" style={{ color: parentActive ? 'var(--brand)' : 'var(--text-muted)' }}>
+                        {item.icon}
+                      </span>
+                      {!collapsed && (
+                        <>
+                          <span className="truncate flex-1">{item.label}</span>
+                          {hasChildren && (
+                            <svg
+                              width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                              strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                              className="flex-shrink-0 transition-transform duration-200"
+                              style={{
+                                color: 'var(--text-muted)',
+                                transform: expanded ? 'rotate(90deg)' : 'rotate(0deg)',
+                              }}
+                            >
+                              <polyline points="9 18 15 12 9 6" />
+                            </svg>
+                          )}
+                        </>
+                      )}
+                    </Link>
+                  </div>
+
+                  {/* Sub-items (tree diagram style) */}
+                  {hasChildren && expanded && !collapsed && (
+                    <ul className="ml-5 mt-0.5 space-y-0.5 relative">
+                      {/* Vertical tree line */}
+                      <div
+                        className="absolute left-[11px] top-0 bottom-2 w-px"
+                        style={{ background: 'var(--border)' }}
+                      />
+                      {item.children!.map((child, idx) => {
+                        const childActive = isActive(child.href);
+                        const isLast = idx === item.children!.length - 1;
+                        return (
+                          <li key={child.href} className="relative">
+                            {/* Horizontal branch line */}
+                            <div
+                              className="absolute left-[11px] top-1/2 w-3 h-px"
+                              style={{ background: 'var(--border)' }}
+                            />
+                            {/* Corner for last item */}
+                            {isLast && (
+                              <div
+                                className="absolute left-[11px] top-1/2 bottom-0 w-px"
+                                style={{ background: 'var(--bg-alt)' }}
+                              />
+                            )}
+                            <Link
+                              href={child.href}
+                              className={`
+                                sidebar-sub-item flex items-center gap-2 pl-8 pr-3 py-2 rounded-lg text-[13px] transition-all duration-150
+                                ${childActive ? 'sidebar-nav-active font-medium' : ''}
+                              `}
+                            >
+                              {/* Dot indicator */}
+                              <span
+                                className="w-1.5 h-1.5 rounded-full flex-shrink-0 transition-colors"
+                                style={{
+                                  background: childActive ? 'var(--brand)' : 'var(--text-muted)',
+                                  opacity: childActive ? 1 : 0.4,
+                                }}
+                              />
+                              <span className="truncate">{child.label}</span>
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
                 </li>
               );
             })}
@@ -234,7 +365,7 @@ export default function Sidebar() {
               type="button"
               onClick={() => setTheme(isDark ? 'light' : 'dark')}
               className={`
-                flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm transition-colors
+                sidebar-nav-item flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm transition-all duration-150
                 ${collapsed ? 'lg:justify-center lg:px-2' : ''}
               `}
               style={{ color: 'var(--text-muted)' }}
@@ -280,8 +411,10 @@ export default function Sidebar() {
                   <button
                     type="button"
                     onClick={() => disconnect()}
-                    className="text-xs hover:underline"
+                    className="text-xs transition-colors"
                     style={{ color: 'var(--text-muted)' }}
+                    onMouseEnter={e => (e.currentTarget.style.color = 'var(--brand)')}
+                    onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-muted)')}
                   >
                     Disconnect
                   </button>
