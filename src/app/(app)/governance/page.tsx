@@ -1,10 +1,11 @@
 'use client';
 
+import { formatPercent, formatTokenAmount } from '@/lib/format';
 import { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
-import { parseEther } from 'viem';
-import { formatTokenAmount, formatPercent } from '@/lib/format';
+
 import PageHeader from '@/components/PageHeader';
+import { parseEther } from 'viem';
+import { useAccount } from 'wagmi';
 import { useNotareumFactory } from '@/hooks/useNotareum';
 
 const DAY = 86400;
@@ -123,7 +124,7 @@ export default function GovernancePage() {
       />
 
       {/* Voting power summary */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
         <div className="glass-panel p-5">
           <div className="stat-label mb-2">My Voting Power</div>
           <div className="stat-value">{formatTokenAmount(votingPower)}</div>
@@ -161,7 +162,7 @@ export default function GovernancePage() {
 
           <div>
             <label className="label-field">Duration</label>
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
               {DURATIONS.map((d, i) => (
                 <button
                   key={d.label}

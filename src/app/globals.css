@@ -325,8 +325,11 @@ pre {
   background: var(--border);
   border: 1px solid var(--border);
   border-radius: 6px;
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
+.segmented-nav::-webkit-scrollbar { display: none; }
 .segmented-nav button {
   background: var(--bg-alt);
   color: var(--text-muted);
@@ -417,7 +420,7 @@ pre {
 
 /* ─── Dashboard stat number ─── */
 .stat-value {
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-size: clamp(1.125rem, 3vw, 1.75rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.2;
@@ -425,6 +428,7 @@ pre {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  max-width: 100%;
 }
 .stat-label {
   font-size: 0.75rem;

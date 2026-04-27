@@ -85,7 +85,7 @@ export default function EntryPage() {
               </div>
 
               <h1
-                className="text-5xl sm:text-6xl font-bold tracking-tight mb-5"
+                className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-5"
                 style={{ color: 'var(--text)', letterSpacing: '-0.035em', lineHeight: 1.02 }}
               >
                 The Trust Layer
