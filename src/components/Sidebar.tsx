@@ -187,7 +187,7 @@ export default function Sidebar() {
     <>
       {/* Mobile top bar */}
       <div
-        className="lg:hidden sticky top-0 z-40 flex items-center justify-between px-4 h-14 border-b backdrop-blur-sm"
+        className="lg:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4 h-14 border-b backdrop-blur-sm"
         style={{ borderColor: 'var(--border)', backgroundColor: 'color-mix(in srgb, var(--bg) 92%, transparent)' }}
       >
         <Link href="/dashboard" className="flex items-center gap-2">

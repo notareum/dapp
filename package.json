@@ -10,7 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@notareum/sdk": "file:../notareum-ts-sdk",
+    "@notareum/sdk": "^1.0.0",
     "@tanstack/react-query": "^5.62.0",
     "connectkit": "^1.8.2",
     "ethers": "^6.13.4",

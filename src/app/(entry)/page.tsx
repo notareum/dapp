@@ -1,11 +1,12 @@
 'use client';
 
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAccount } from 'wagmi';
-import { useTheme } from 'next-themes';
+
 import ConnectButton from '@/components/ConnectButton';
+import Image from 'next/image';
+import { useAccount } from 'wagmi';
+import { useRouter } from 'next/navigation';
+import { useTheme } from 'next-themes';
 
 export default function EntryPage() {
   const router = useRouter();
@@ -77,14 +78,14 @@ export default function EntryPage() {
         <div className="w-full max-w-6xl mx-auto px-6 sm:px-10 py-10 lg:py-16">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             {/* Left: brand messaging */}
-            <div className="animate-fade-up">
+            <div className="animate-fade-up order-2 lg:order-1">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono mb-6" style={{ background: 'var(--brand-fog)', color: 'var(--brand)', border: '1px solid color-mix(in srgb, var(--brand) 25%, transparent)' }}>
                 <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--brand)' }} />
                 Sepolia Testnet
               </div>
 
               <h1
-                className="text-5xl sm:text-6xl font-bold tracking-tight mb-5"
+                className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-5"
                 style={{ color: 'var(--text)', letterSpacing: '-0.035em', lineHeight: 1.02 }}
               >
                 The Trust Layer
@@ -158,7 +159,7 @@ export default function EntryPage() {
             </div>
 
             {/* Right: connect card */}
-            <div className="animate-fade-up delay-200 flex justify-center lg:justify-end">
+            <div className="animate-fade-up delay-200 flex justify-center lg:justify-end order-1 lg:order-2">
               <div className="glass-panel p-8 sm:p-10 w-full max-w-md relative overflow-hidden">
                 {/* Subtle corner glow */}
                 <div
@@ -216,7 +217,7 @@ export default function EntryPage() {
 
       {/* Footer */}
       <footer
-        className="relative z-10 px-6 sm:px-10 py-5 flex flex-col sm:flex-row items-center justify-between gap-3"
+        className="relative z-10 px-6 sm:px-10 py-5 flex flex-col-reverse sm:flex-row items-center justify-between gap-3"
         style={{ borderTop: '1px solid var(--border)' }}
       >
         <div className="flex items-center gap-4 text-xs font-mono" style={{ color: 'var(--text-muted)' }}>

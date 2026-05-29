@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import PageHeader from '@/components/PageHeader';
 import ResourceCard from '@/components/ResourceCard';
 import { useNotareumFactory } from '@/hooks/useNotareum';
+import { useState } from 'react';
 
 interface FoundResource {
   resourceId: string;
@@ -63,8 +63,8 @@ export default function ExplorerPage() {
       />
 
       {/* Search */}
-      <form onSubmit={handleSearch} className="glass-panel p-5 flex gap-3 mb-6">
-        <div className="flex items-center flex-1 gap-2 px-3 rounded-lg" style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}>
+      <form onSubmit={handleSearch} className="glass-panel p-4 sm:p-5 flex flex-col sm:flex-row gap-3 mb-6">
+        <div className="flex items-center flex-1 min-w-0 gap-2 px-3 rounded-lg" style={{ background: 'var(--bg)', border: '1px solid var(--border)' }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--text-muted)' }}>
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -77,7 +77,7 @@ export default function ExplorerPage() {
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
-        <button type="submit" className="btn-primary text-sm" disabled={busy}>
+        <button type="submit" className="btn-primary text-sm w-full sm:w-auto" disabled={busy}>
           {busy ? '…' : 'Search'}
         </button>
       </form>
@@ -101,7 +101,7 @@ export default function ExplorerPage() {
       {/* Stats */}
       <section className="mb-8">
         <h2 className="text-lg font-semibold mb-4" style={{ color: 'var(--text)' }}>Protocol Stats</h2>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           <StatCard label="Registrations" value="—" hint="Indexer pending" />
           <StatCard label="Verified" value="—" hint="Indexer pending" />
           <StatCard label="Pending" value="—" hint="Indexer pending" />

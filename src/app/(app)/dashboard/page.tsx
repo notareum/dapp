@@ -1,11 +1,13 @@
 'use client';
 
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { useAccount, useBalance } from 'wagmi';
+import { useEffect, useState } from 'react';
+
+import Link from 'next/link';
+import TierBadge from '@/components/TierBadge';
 import { ValidatorTier } from '@notareum/sdk';
-import { useNotareum } from '@/hooks/useNotareum';
 import { formatTokenAmount } from '@/lib/format';
+import { useNotareum } from '@/hooks/useNotareum';
 
 function formatEthBal(value: bigint): string {
   try {
@@ -15,7 +17,6 @@ function formatEthBal(value: bigint): string {
     return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
   } catch { return '0'; }
 }
-import TierBadge from '@/components/TierBadge';
 
 function truncateAddr(addr?: string) {
   if (!addr) return '';
@@ -89,7 +90,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8">
       {/* Decorative background blobs (absolute-positioned, contained inside <main>) */}
-      <div className="relative -mt-6 sm:-mt-8 lg:-mt-10">
+      <div className="relative -mt-6 sm:-mt-8 lg:-mt-10 overflow-hidden pointer-events-none hidden sm:block" aria-hidden>
         <div className="decor-blur w-[420px] h-[420px] -top-20 -left-20" style={{ background: 'color-mix(in srgb, var(--brand) 35%, transparent)' }} />
         <div className="decor-blur w-[360px] h-[360px] top-40 right-0" style={{ background: 'color-mix(in srgb, var(--brand-soft) 30%, transparent)' }} />
       </div>
@@ -168,7 +169,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Quick actions */}
-          <div className="grid grid-cols-3 gap-2.5">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             <QuickAction
               href="/registry"
               label="Register"

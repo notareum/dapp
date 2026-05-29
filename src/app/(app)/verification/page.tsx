@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-import { useAccount } from 'wagmi';
-import { formatEther } from 'viem';
 import PageHeader from '@/components/PageHeader';
+import { formatEther } from 'viem';
+import { useAccount } from 'wagmi';
 import { useNotareumFactory } from '@/hooks/useNotareum';
+import { useState } from 'react';
 
 const LEVELS = [
   { value: 0, label: 'Basic', fee: 100n * 10n ** 18n, description: 'Quick community check via 3 attestations.' },
@@ -83,7 +83,7 @@ export default function VerificationPage() {
       />
 
       {/* Level selector cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         {LEVELS.map((l) => (
           <button
             key={l.value}
